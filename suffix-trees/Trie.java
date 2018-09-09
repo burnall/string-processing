@@ -23,28 +23,12 @@ public class Trie {
         }
     }
 
-   static class Vertex {
-       Map<Character, Vertex> edges = new HashMap<>();
-       
-       void addPattern(String s) {
-           Vertex current = this;
-           for (int i = 0; i < s.length(); i++) {
-               Vertex next = current.edges.get(s.charAt(i));
-               if (next == null) {
-                   next = new Vertex();
-                   current.edges.put(s.charAt(i), next);
-               } 
-               current = next;
-           }     
-       } 
-   }
-
-   void walk(Vertex vertex, List<Map<Character, Integer>> trie) {
+   void walk(MyTrie myTrie, List<Map<Character, Integer>> trie) {
        Map<Character, Integer> map = new HashMap<>();
        Integer i = trie.size();
        trie.add(map);
        
-       for (Map.Entry<Character, Vertex> entry : vertex.edges.entrySet()) {
+       for (Map.Entry<Character, MyTrie> entry : myTrie.edges.entrySet()) {
            map.put(entry.getKey(), trie.size());
            walk(entry.getValue(), trie);
        } 
@@ -52,7 +36,7 @@ public class Trie {
    
     List<Map<Character, Integer>> buildTrie(String[] patterns) {
 
-        Vertex root = new Vertex();
+        MyTrie root = new MyTrie();
         for (int i = 0; i < patterns.length; i++) {
             root.addPattern(patterns[i]); 
         }
