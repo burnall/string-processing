@@ -36,7 +36,6 @@ public class TrieMatching implements Runnable {
             if (trie.match(text.substring(i))) {
                 result.add(i);
             }
-            // System.out.println("aaa: " + trie.match(text.substring(i)));
         }
 
 		return result;
