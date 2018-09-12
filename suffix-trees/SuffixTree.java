@@ -26,7 +26,7 @@ public class SuffixTree {
     // with all of the labels of its edges (the corresponding 
     // substrings of the text) in any order.
     public List<String> computeSuffixTreeEdges(String text) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         // Implement this function yourself
         return result;
     }
