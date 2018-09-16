@@ -27,8 +27,12 @@ public class SuffixTree {
     // substrings of the text) in any order.
     public List<String> computeSuffixTreeEdges(String text) {
         List<String> result = new ArrayList<>();
-        SuffixTreeI tree = new SuffixTreeI(text + "$");
-        tree.walk(edge -> System.out.println(text.substring(edge.pointer.start, edge.pointer.end)));
+        SuffixTreeI tree = new SuffixTreeI(text);
+        System.out.println(text);
+        // tree.walk(edge -> System.out.println(String.format("%d - %d", edge.pointer.start, edge.pointer.end)));
+        tree.walk(edge -> System.out.println(String.format("%d - %d - %s", edge.pointer.start, edge.pointer.end, 
+            edge.pointer.end < edge.pointer.start ? "" :text.substring(edge.pointer.start, edge.pointer.end))));
+
 
        return result;
     }

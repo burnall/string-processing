@@ -29,7 +29,7 @@ public class SuffixTreeI {
     SuffixTreeI(String text) {
         this.text = text;
         int len = text.length();
-        for (int i = 0; i < len - 1; i++ ) {
+        for (int i = 0; i < len; i++) {
             root.add(new Pointer(i, len));
         }
     }
@@ -62,21 +62,24 @@ public class SuffixTreeI {
                 } else {
                     // Append intermediate node between this and edge.node
                     Node intermediate = new Node();
-                    this.edges.put(head, new Edge(new Pointer(pointer.start, pointer.start + diffPos), intermediate));
-
+                          
                     intermediate.edges.put(text.charAt(edge.pointer.start + diffPos),
                         new Edge(new Pointer(edge.pointer.start + diffPos, edge.pointer.end), edge.to));
                     intermediate.edges.put(text.charAt(pointer.start + diffPos),
                         new Edge(new Pointer(pointer.start + diffPos, pointer.end), new Node()));
-                }   
+                    
+                    edge.to = intermediate; 
+                    edge.pointer.end = edge.pointer.start + diffPos;
+                }
+                       
             } 
          }
 
          int getFirstDiffPosition(Pointer p1, Pointer p2) {
              int current = 1;
-             int max = Math.max(p1.end - p1.start, p2.end - p2.start);
+             int minLen = Math.min(p1.end - p1.start, p2.end - p2.start);
              String text = SuffixTreeI.this.text;
-             while (current < max) {
+             while (current < minLen) {
                  if (text.charAt(p1.start + current) == text.charAt(p2.start + current)) {
                      current++;
                  } else {
