@@ -14,16 +14,19 @@ class Position {
 public class NonSharedSubstring implements Runnable {
 	String solve(String p, String q) {
 
-	    String combined = q + p + "$";
+	    String combined = q + "#" + p + "$";
         SuffixTreeI tree = new SuffixTreeI(combined);
 		List<Position> levelNodes = Arrays.asList(new Position(tree.root, 0));
-        int qLen = q.length();
+        int qLen = q.length() + 1;
         int len = combined.length();
 
         while (!levelNodes.isEmpty()) {
             List<Position> newLevelNodes = new ArrayList<>();
             for (Position pos : levelNodes) {
                 for (Edge edge: pos.node.edges.values()) {
+                    if (edge.pointer.start < qLen && edge.pointer.end >= qLen) {
+                        continue;
+                    }
                     if (edge.pointer.start == len - 1) { // Ignore $
                         continue;
                     }
