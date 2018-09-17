@@ -27,7 +27,7 @@ public class NonSharedSubstring implements Runnable {
             List<Position> newLevelNodes = new ArrayList<>();
             for (Position pos : levelNodes) {
                 if (pos.count >= minCount) {
-                    break;
+                    continue;
                 }
                 for (Edge edge: pos.node.edges.values()) {
                     if (edge.pointer.start < qLen && edge.pointer.end >= qLen) {
