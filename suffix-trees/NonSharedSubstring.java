@@ -20,9 +20,15 @@ public class NonSharedSubstring implements Runnable {
         int qLen = q.length() + 1;
         int len = combined.length();
 
+        int minCount = len;
+        int indexOfMin = -1;
+
         while (!levelNodes.isEmpty()) {
             List<Position> newLevelNodes = new ArrayList<>();
             for (Position pos : levelNodes) {
+                if (pos.count >= minCount) {
+                    break;
+                }
                 for (Edge edge: pos.node.edges.values()) {
                     if (edge.pointer.start < qLen && edge.pointer.end >= qLen) {
                         continue;
@@ -31,15 +37,18 @@ public class NonSharedSubstring implements Runnable {
                         continue;
                     }
                     if (edge.pointer.start >= qLen) {
-                        int i = edge.pointer.start - qLen - pos.count;
-                        return p.substring(i, i + pos.count + 1);
+                        if (pos.count < minCount) {
+                            minCount = pos.count;
+                            indexOfMin =  edge.pointer.start - qLen - pos.count;
+                        }
+                        continue;
                     }
                     newLevelNodes.add(new Position(edge.to, pos.count + edge.pointer.end - edge.pointer.start));
                 }     
             }
             levelNodes = newLevelNodes;
         }
-		throw new IllegalStateException("Should not happen");
+        return p.substring(indexOfMin, indexOfMin + minCount + 1);
 	}
 
 	public void run() {
