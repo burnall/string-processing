@@ -18,7 +18,21 @@
         ))
 
 
+(defn invert0 [s] 
+  (letfn [(step [items] (sort (map str s items)))] 
+    (first (nth (iterate step (repeat (count s) "")) (count s))))) 
+   
+(defn invert [s] 
+  (letfn [(step [items] (sort (map str s items)))] 
+    (-> s
+        (count)
+        (repeat "")
+        (->> (iterate step))
+        (nth (count s))
+        (first))))
+    
+
 (defn -main
-  "I don't do a whole lot ... yet."
+  "I don't do a whole lot."
   [& args]
   (println "Hello, World!"))
