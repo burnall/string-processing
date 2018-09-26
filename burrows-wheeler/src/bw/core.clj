@@ -33,21 +33,27 @@
 
 ; [2 3 1 1 2] -> :indexByElem{1 [2 3], 2 [0 4], 3 [1]},  :indexByPos [0 0 0 1 1] 
 (defn get-indexes [s]
-  (reduce (fn [{:keys [indexByElem  indexByPos]} ch] 
-             (let [pos (count indexByPos)
-                   elems (get indexByElem ch [])]
-               {:indexByPos (conj indexByPos (count elems)) 
-                :indexByElem (assoc indexByElem ch (conj elems pos))}))
-          {:indexByPos [], :indexByElem {}} 
+  (reduce (fn [{:keys [index-by-elem  index-by-pos]} ch] 
+             (let [pos (count index-by-pos)
+                   elems (get index-by-elem ch [])]
+               {:index-by-pos (conj index-by-pos (count elems)) 
+                :index-by-elem (assoc index-by-elem ch (conj elems pos))}))
+          {:index-by-pos [], :index-by-elem {}} 
           s))
 
 (defn invert-better [s] 
-  (let [ss (sort s)
-        s-i (get-indexes s)
-        ss-i (get-indexes ss)
-       ]
-       22
-))
+  (let [lst (vec s)
+        fst (vec (sort lst))
+        {fst-by-elem :index-by-elem, fst-by-pos :index-by-pos} (get-indexes fst)
+        {lst-by-elem :index-by-elem, lst-by-pos :index-by-pos}  (get-indexes lst)
+        step (fn [items] 
+          (let [i (first items)
+                ch (lst i)
+                pos (lst-by-pos i)
+                j  ((get fst-by-elem ch) pos)]
+             (cons j items)))]   
+    (apply str (map lst (nth (iterate step '(0)) (dec (count lst)))))))   
+       
 
 
 (defn -main
