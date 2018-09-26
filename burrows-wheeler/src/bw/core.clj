@@ -41,21 +41,44 @@
           {:index-by-pos [], :index-by-elem {}} 
           s))
 
+; [1 1 2 3 3 3] -> {1 0, 2 2, 3 3}
+(defn get-index-for-sorted [s]
+  (reduce (fn [index-map [i ch]] 
+            (if (contains? index-map ch) 
+              index-map 
+              (assoc index-map ch i)))
+          {}
+          (map vector (range) s))) 
+
+; [2 3 1 1 2] -> [0 0 0 1 1]
+(defn get-index-for-unsorted [s]
+  (->> s
+       (reduce (fn [{:keys [count-by-elem index]} ch]
+                 (let [cnt (get count-by-elem ch 0)]
+                    {:count-by-elem (assoc count-by-elem ch (inc cnt))
+                     :index (conj index cnt)}))    
+               {:count-by-elem {}
+               :index []})
+      (:index)))         
+
+
 (defn invert-better [s] 
   (let [lst (vec s)
         fst (vec (sort lst))
-        {fst-by-elem :index-by-elem, fst-by-pos :index-by-pos} (get-indexes fst)
-        {lst-by-elem :index-by-elem, lst-by-pos :index-by-pos}  (get-indexes lst)
+        fst-index (get-index-for-sorted fst)
+        lst-index (get-index-for-unsorted lst)
         step (fn [items] 
           (let [i (first items)
                 ch (lst i)
-                pos (lst-by-pos i)
-                j  ((get fst-by-elem ch) pos)]
+                pos (lst-index i)
+                j  (+ (get fst-index ch) pos)]
              (cons j items)))]   
-    (apply str (map lst (nth (iterate step '(0)) (dec (count lst)))))))   
-       
-
-
+    (->> '(0)
+         (iterate step)
+         ((fn [list] (nth list (dec (count lst)))))
+         (map lst)
+         (apply str))))
+    
 (defn -main
   "I don't do a whole lot."
   [& args]
