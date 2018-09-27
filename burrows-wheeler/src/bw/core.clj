@@ -4,6 +4,9 @@
 (defn shift-right[s] 
   (str (last s) (subs s 0 (dec (count s)))))
 
+(defn shift-left[s] 
+  (str (subs s 1) (first s)))
+
 (defn transform-burrows-wheeler0 [s]
   (apply str (map last 
                   (sort (take (count s) 
@@ -11,11 +14,10 @@
 
 (defn transform-burrows-wheeler [s]
   (->> s (iterate shift-right)
-          (take (count s))
-          (sort)
-          (map last)
-          (apply str)
-        ))
+         (take (count s))
+         (sort)
+         (map last)
+         (apply str)))
 
 
 (defn invert0 [s] 
@@ -78,7 +80,17 @@
          ((fn [list] (nth list (dec (count lst)))))
          (map lst)
          (apply str))))
-    
+
+(defn construct-suffix-array-brute-force [s] 
+  (->> s (iterate shift-left)
+         (take (count s))
+         (map vector (range))
+         (sort-by second)
+         (map first)
+         (interpose " ")
+         (apply str)))
+
+
 (defn -main
   "I don't do a whole lot."
   [& args]
