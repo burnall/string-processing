@@ -1,4 +1,4 @@
-(ns bw.core
+(ns knut-morris-pratt.core
   (:gen-class))
 
 (defn -main

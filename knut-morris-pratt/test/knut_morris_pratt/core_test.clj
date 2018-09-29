@@ -1,6 +1,6 @@
-(ns bw.core-test
+(ns knut-morris-pratt.core-test
   (:require [clojure.test :refer :all]
-            [bw.core :refer :all]))
+            [knut-morris-pratt.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
