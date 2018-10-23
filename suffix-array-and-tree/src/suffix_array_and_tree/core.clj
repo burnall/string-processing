@@ -1,7 +1,9 @@
 (ns suffix-array-and-tree.core
-  (:gen-class))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+(defn sort-by-char[strings] 
+  (let [index-by-char (reduce (fn [m [[c] i]] (update m c (fn [key] (conj (if key key []) i))))  
+                              (sorted-map) 
+                              (map vector strings (range)))]
+    (->> index-by-char
+        (vals)
+        (apply concat))))
