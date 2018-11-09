@@ -1,28 +1,31 @@
 (ns suffix-array-and-tree.core)
 
-(defn sort-by-char[strings] 
-  (let [index-by-char (reduce (fn [m [[c] i]] (update m c (fn [key] (conj (if key key []) i))))  
+(defn sort-by-char [len get-by-index] 
+  (let [index-by-char (reduce (fn [m i] (update m (get-by-index i) (fn [key] (conj (if key key []) i))))  
                               (sorted-map) 
-                              (map vector strings (range)))]
+                              (range len))]
     (->> index-by-char
         (vals)
         (apply concat))))
 
-(defn get-classes[strings index-by-char]
+(defn get-classes [get-by-index index-by-char]
   (->> index-by-char 
        (reduce (fn [{:keys [last-char last-order classes]} index]
-                 (let [ch (first (strings index))
+                 (let [ch (get-by-index index)
                        order (+ last-order (if (= ch last-char) 0 1))]   
                    {:last-char ch
                     :last-order order
                     :classes (conj classes order)}))
-               {:last-char (-> index-by-char (first) (strings) (first))
+               {:last-char (-> index-by-char (first) (get-by-index))
                 :last-order 0
                 :classes []})
        (:classes)))         
 
-(defn t [strings]
-  (->> strings
-       (sort-by-char)
-       (get-classes strings)))
+(defn t [strings] 
+  (let [get-by-index #(first (strings %))]
+     (->> (sort-by-char (count strings) get-by-index)
+          (get-classes get-by-index))))
 
+(defn u [string] 
+
+)
