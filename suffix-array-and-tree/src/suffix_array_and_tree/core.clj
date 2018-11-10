@@ -15,10 +15,10 @@
                        order (+ last-order (if (= ch last-char) 0 1))]   
                    {:last-char ch
                     :last-order order
-                    :classes (conj classes order)}))
+                    :classes (assoc classes index order)}))
                {:last-char (-> index-by-char (first) (get-by-index))
                 :last-order 0
-                :classes []})
+                :classes (vec (int-array (count index-by-char)))})
        (:classes)))         
 
 (defn t [strings] 
@@ -26,6 +26,8 @@
      (->> (sort-by-char (count strings) get-by-index)
           (get-classes get-by-index))))
 
-(defn u [string] 
+(defn u [v] 
+  (->> v
+       (sort-by-char (count v))
+       (get-classes v)))
 
-)
