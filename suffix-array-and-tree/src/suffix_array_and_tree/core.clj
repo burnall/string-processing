@@ -8,7 +8,7 @@
         (vals)
         (apply concat))))
 
-(defn get-classes [get-by-index index-by-char]
+(defn get-class-by-char [get-by-index index-by-char]
   (->> index-by-char 
        (reduce (fn [{:keys [last-char last-order classes]} index]
                  (let [ch (get-by-index index)
@@ -21,13 +21,24 @@
                 :classes (vec (int-array (count index-by-char)))})
        (:classes)))         
 
-(defn t [strings] 
+(defn class-by-char-for-strings [strings] 
   (let [get-by-index #(first (strings %))]
      (->> (sort-by-char (count strings) get-by-index)
-          (get-classes get-by-index))))
+          (get-class-by-char get-by-index))))
 
-(defn u [v] 
-  (->> v
-       (sort-by-char (count v))
-       (get-classes v)))
+(defn class-by-char-for-cycle-shifts [v-string] 
+  (->> v-string
+       (sort-by-char (count v-string))
+       (get-class-by-char v-string)))
+
+(defn sort-cycle-shifts
+  ([v-string] 
+    (let [order (sort-by-char (count v-string) v-string)
+          clazz (get-class-by-char v-string order)]
+      (sort-cycle-shifts v-string order clazz)))    
+  
+  ([v-string order clazz]
+
+    ))
+
 
