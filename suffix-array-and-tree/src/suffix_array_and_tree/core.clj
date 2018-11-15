@@ -31,14 +31,27 @@
        (sort-by-char (count v-string))
        (get-class-by-char v-string)))
 
+(defn get-count[classes]
+  (->> classes 
+       (frequencies)
+       (sort-by first)
+       (reduce (fn [[prev-count v] [item cnt]] 
+                 (let [new-count (+ prev-count cnt)] 
+                   [new-count (conj v [item new-count])]))
+               [0 []])
+      (second)
+      (mapv second)))
+
+
 (defn sort-cycle-shifts
   ([v-string] 
     (let [order (sort-by-char (count v-string) v-string)
           clazz (get-class-by-char v-string order)]
-      (sort-cycle-shifts v-string order clazz)))    
+      (sort-cycle-shifts v-string order clazz 1)))    
   
-  ([v-string order clazz]
-
-    ))
+  ([v-string order clazz n] 
+    (if (>= n (count v-string))
+      order
+      order)))
 
 
