@@ -6,7 +6,8 @@
                               (range len))]
     (->> index-by-char
         (vals)
-        (apply concat))))
+        (apply concat)
+        (vec))))
 
 (defn get-class-by-char [get-by-index index-by-char]
   (->> index-by-char 
@@ -52,6 +53,18 @@
   ([v-string order clazz n] 
     (if (>= n (count v-string))
       order
-      order)))
+      (let [len (count v-string)
+            cnt (get-count clazz) 
+            order (second (reduce (fn [[counts v] i] 
+                            (let [start (mod (+ (- (order i) n) len) len)
+                                  cl (clazz start)
+                                  newCnt (dec (counts cl))]
+                              (do (println i counts start cl newCnt v) [(assoc counts cl newCnt) (assoc v newCnt start)]))) 
+                          [cnt (vec (int-array len))]
+                          (range (dec len) -1 -1)))
+           
+           clazz 22]
+        order)))) 
+        ;(recur v-string order clazz (* 2 n))))))
 
 
