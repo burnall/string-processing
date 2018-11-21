@@ -43,6 +43,15 @@
       (second)
       (mapv second)))
 
+(defn update-classes [classes order n]
+  (->> order
+       (reduce (fn [{:keys [cur cl0 cl1 new-classes]} index]
+                  (let [new-cl0 (classes index)
+                        new-cl1 (classes (mod (+ index n) (count classes)))
+                        new-cl (if (and (= cl0 new-cl0) (= cl1 new-cl1)) cur (inc cur))]
+                    {:cur new-cl, :cl0 new-cl0, :cl1 new-cl1, :new-classes (assoc new-classes index new-cl)})
+               {:cur -1, :cl0 -1, :cl1 -1, :new-classes (vec (int-array (count classes)))})
+       :new-classes))
 
 (defn sort-cycle-shifts
   ([v-string] 
@@ -59,12 +68,10 @@
                             (let [start (mod (+ (- (order i) n) len) len)
                                   cl (clazz start)
                                   newCnt (dec (counts cl))]
-                              (do (println i counts start cl newCnt v) [(assoc counts cl newCnt) (assoc v newCnt start)]))) 
+                              [(assoc counts cl newCnt) (assoc v newCnt start)])) 
                           [cnt (vec (int-array len))]
                           (range (dec len) -1 -1)))
            
-           clazz 22]
-        order)))) 
-        ;(recur v-string order clazz (* 2 n))))))
-
+           clazz (update-classes clazz order n)]
+        (recur v-string order clazz (* 2 n))))))
 
